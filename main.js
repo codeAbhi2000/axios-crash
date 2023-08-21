@@ -1,31 +1,95 @@
 // GET REQUEST
 function getTodos() {
   console.log('GET Request');
+  axios({
+    method: 'get',
+    url: 'https://jsonplaceholder.typicode.com/todos',
+    params: {
+      _limit: 5
+    }
+  })
+    .then(res => showOutput(res))
+    .catch(err => console.error(err));
+  // axios
+  // . get( I https://j sonplaceho
+  // . then( res
+  // showOutput ( r
+  // . catch(err => console.err
+  // 1
+  // com/todos?_limit=5 1 )
+  // s)
+  axios.get('https://jsonplaceholder.typicode.com/todos?_limit=5')
+    .then((res) => {
+      showOutput(res)
+    }).catch(err => console.log(err))
 }
 
 // POST REQUEST
 function addTodo() {
   console.log('POST Request');
+  axios.post('https://jsonplaceholder.typicode.com/todos', {
+    title: "abhishek creation",
+    completed: false
+  }).then((res) => {
+    showOutput(res)
+  }).catch(err => console.log(err))
 }
 
 // PUT/PATCH REQUEST
 function updateTodo() {
   console.log('PUT/PATCH Request');
+  /*
+  axios.put('https://jsonplaceholder.typicode.com/todos/1',{
+    title: "abhishek creation",
+    completed: true
+  }).then((res)=>{
+    showOutput(res)
+  }).catch(err => console.log(err))
+  */
+  axios.patch('https://jsonplaceholder.typicode.com/todos/1', {
+    title: "abhishek creation",
+    completed: true
+  }).then((res) => {
+    showOutput(res)
+  }).catch(err => console.log(err))
 }
 
 // DELETE REQUEST
 function removeTodo() {
   console.log('DELETE Request');
+  axios.delete('https://jsonplaceholder.typicode.com/todos/1'
+  ).then((res) => {
+    showOutput(res)
+  }).catch(err => console.log(err))
 }
 
 // SIMULTANEOUS DATA
 function getData() {
   console.log('Simultaneous Request');
+  axios.all([
+    axios.get('https://jsonplaceholder.typicode.com/todos?_limit=10'),
+    axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10')
+  ]).then(axios.spread((todos, posts) => { showOutput(posts) })).catch(err => console.log(err))
 }
 
 // CUSTOM HEADERS
 function customHeaders() {
   console.log('Custom Headers');
+  const config = {
+    headers:{
+      "content-type":'application/json',
+      Authorization : "sometoken"
+    }
+  }
+
+  axios.post('https://jsonplaceholder.typicode.com/todos', {
+    title: "abhishek creation",
+    completed: false
+  },
+  config
+  ).then((res) => {
+    showOutput(res)
+  }).catch(err => console.log(err))
 }
 
 // TRANSFORMING REQUESTS & RESPONSES
@@ -44,6 +108,17 @@ function cancelToken() {
 }
 
 // INTERCEPTING REQUESTS & RESPONSES
+axios.interceptors.request.use(
+  config => {
+    console.log(`request sentl to ${config.url
+      } at ${new Date().getTime()}`)
+    return config;
+  }
+  , error => {
+    return Promise.reject(error)
+  }
+
+);
 
 // AXIOS INSTANCES
 
